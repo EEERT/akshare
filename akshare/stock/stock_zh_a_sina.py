@@ -465,8 +465,8 @@ def _get_zh_sh_a_page_count() -> int:
     }
     r = requests.get(zh_sina_sh_a_stock_count_url, params=params)
     page_count = int(re.findall(re.compile(r"\d+"), r.text)[0]) / 80
-    if isinstance(page_count, int):
-        return page_count
+    if page_count % 1 == 0:
+        return int(page_count)
     else:
         return int(page_count) + 1
 
@@ -502,8 +502,8 @@ def _get_zh_sz_a_page_count() -> int:
     }
     r = requests.get(zh_sina_sz_a_stock_count_url, params=params)
     page_count = int(re.findall(re.compile(r"\d+"), r.text)[0]) / 80
-    if isinstance(page_count, int):
-        return page_count
+    if page_count % 1 == 0:
+        return int(page_count)
     else:
         return int(page_count) + 1
 
