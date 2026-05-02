@@ -22,6 +22,12 @@ from akshare.stock.cons import (
     zh_sina_a_stock_hfq_url,
     zh_sina_a_stock_qfq_url,
     zh_sina_a_stock_amount_url,
+    zh_sina_sh_a_stock_url,
+    zh_sina_sh_a_stock_count_url,
+    zh_sina_sh_a_stock_payload,
+    zh_sina_sz_a_stock_url,
+    zh_sina_sz_a_stock_count_url,
+    zh_sina_sz_a_stock_payload,
 )
 from akshare.utils import demjson
 from akshare.utils.tqdm import get_tqdm
@@ -445,6 +451,80 @@ def stock_zh_a_minute(
         return temp_df
     else:
         return pd.DataFrame()
+
+
+def _get_zh_sh_a_page_count() -> int:
+    """
+    新浪财经-行情中心-沪市A股的总页数
+    https://vip.stock.finance.sina.com.cn/mkt/#sh_a
+    :return: 总页数
+    :rtype: int
+    """
+    params = {
+        "node": "sh_a",
+    }
+    r = requests.get(zh_sina_sh_a_stock_count_url, params=params)
+    page_count = int(re.findall(re.compile(r"\d+"), r.text)[0]) / 80
+    if isinstance(page_count, int):
+        return page_count
+    else:
+        return int(page_count) + 1
+
+
+def stock_zh_sh_a_spot_sina() -> pd.DataFrame:
+    """
+    新浪财经-行情中心-沪市A股-实时行情数据; 大量抓取容易封IP
+    https://vip.stock.finance.sina.com.cn/mkt/#sh_a
+    :return: 所有沪市A股在当前时刻的实时行情数据
+    :rtype: pandas.DataFrame
+    """
+    big_df = pd.DataFrame()
+    page_count = _get_zh_sh_a_page_count()
+    payload_copy = zh_sina_sh_a_stock_payload.copy()
+    tqdm = get_tqdm()
+    for page in tqdm(range(1, page_count + 1), leave=False):
+        payload_copy.update({"page": page})
+        r = requests.get(zh_sina_sh_a_stock_url, params=payload_copy)
+        data_json = demjson.decode(r.text)
+        big_df = pd.concat(objs=[big_df, pd.DataFrame(data_json)], ignore_index=True)
+    return big_df
+
+
+def _get_zh_sz_a_page_count() -> int:
+    """
+    新浪财经-行情中心-深市A股的总页数
+    https://vip.stock.finance.sina.com.cn/mkt/#sz_a
+    :return: 总页数
+    :rtype: int
+    """
+    params = {
+        "node": "sz_a",
+    }
+    r = requests.get(zh_sina_sz_a_stock_count_url, params=params)
+    page_count = int(re.findall(re.compile(r"\d+"), r.text)[0]) / 80
+    if isinstance(page_count, int):
+        return page_count
+    else:
+        return int(page_count) + 1
+
+
+def stock_zh_sz_a_spot_sina() -> pd.DataFrame:
+    """
+    新浪财经-行情中心-深市A股-实时行情数据; 大量抓取容易封IP
+    https://vip.stock.finance.sina.com.cn/mkt/#sz_a
+    :return: 所有深市A股在当前时刻的实时行情数据
+    :rtype: pandas.DataFrame
+    """
+    big_df = pd.DataFrame()
+    page_count = _get_zh_sz_a_page_count()
+    payload_copy = zh_sina_sz_a_stock_payload.copy()
+    tqdm = get_tqdm()
+    for page in tqdm(range(1, page_count + 1), leave=False):
+        payload_copy.update({"page": page})
+        r = requests.get(zh_sina_sz_a_stock_url, params=payload_copy)
+        data_json = demjson.decode(r.text)
+        big_df = pd.concat(objs=[big_df, pd.DataFrame(data_json)], ignore_index=True)
+    return big_df
 
 
 if __name__ == "__main__":

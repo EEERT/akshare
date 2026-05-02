@@ -62,6 +62,28 @@ zh_sina_a_stock_hfq_url = "https://finance.sina.com.cn/realstock/company/{}/hfq.
 zh_sina_a_stock_qfq_url = "https://finance.sina.com.cn/realstock/company/{}/qfq.js"
 zh_sina_a_stock_amount_page_url = "https://money.finance.sina.com.cn/corp/go.php/vCI_StockStructureHistory/stockid/{}/stocktype/TotalStock.phtml"
 
+# zh-sina-sh-a
+zh_sina_sh_a_stock_url = "http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeDataSimple"
+zh_sina_sh_a_stock_count_url = "http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeStockCountSimple"
+zh_sina_sh_a_stock_payload = {
+    "page": "1",
+    "num": "80",
+    "sort": "symbol",
+    "asc": "1",
+    "node": "sh_a",
+}
+
+# zh-sina-sz-a
+zh_sina_sz_a_stock_url = "http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeDataSimple"
+zh_sina_sz_a_stock_count_url = "http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeStockCountSimple"
+zh_sina_sz_a_stock_payload = {
+    "page": "1",
+    "num": "80",
+    "sort": "symbol",
+    "asc": "1",
+    "node": "sz_a",
+}
+
 # us-sina
 us_sina_stock_hist_qfq_url = (
     "https://finance.sina.com.cn/us_stock/company/reinstatement/{}_qfq.js"
