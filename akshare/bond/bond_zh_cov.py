@@ -459,6 +459,24 @@ def bond_zh_cov() -> pd.DataFrame:
         big_df["原股东配售-股权登记日"], errors="coerce"
     ).dt.date
     big_df["债现价"] = big_df["债现价"].fillna(100)
+    cov_value_mask = (
+        big_df["转股价值"].isna()
+        & big_df["正股价"].notna()
+        & big_df["转股价"].notna()
+        & (big_df["转股价"] > 0)
+    )
+    big_df.loc[cov_value_mask, "转股价值"] = (
+        big_df.loc[cov_value_mask, "正股价"] / big_df.loc[cov_value_mask, "转股价"] * 100
+    )
+    premium_mask = (
+        big_df["转股溢价率"].isna()
+        & big_df["债现价"].notna()
+        & big_df["转股价值"].notna()
+        & (big_df["转股价值"] > 0)
+    )
+    big_df.loc[premium_mask, "转股溢价率"] = (
+        big_df.loc[premium_mask, "债现价"] / big_df.loc[premium_mask, "转股价值"] - 1
+    ) * 100
     return big_df
 
 

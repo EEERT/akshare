@@ -89,6 +89,10 @@
 
 ## 更新说明详情
 
+1.18.61 fix: fix bond_zh_cov interface
+
+	1. 修复 bond_zh_cov 接口，为转股价值和转股溢价率缺失的债券（如已赎回的闻泰转债）补充计算逻辑
+
 1.18.60 fix: fix stock_zh_index_daily_tx interface
 
 	1. 修复 stock_zh_index_daily_tx 接口
